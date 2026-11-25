@@ -1,0 +1,210 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --surface-page: #f8fafc;
+    --surface-card: #ffffff;
+    --ink-primary: #0f172a;
+    --ink-secondary: #475569;
+    --border-subtle: #e2e8f0;
+  }
+
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--surface-page);
+    color: var(--ink-primary);
+    /* Broad Unicode font stack so ₱ (U+20B1), ×, ÷, ≤, ≥, and math symbols render cleanly */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+      Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Prevent clipping on long passages, multi-line vocab, and math/currency strings */
+.prose-safe {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Subtle custom scrollbars for split workspace panes */
+.workspace-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.workspace-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.workspace-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.workspace-scroll::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.workspace-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+/* Screen preview styling for A4 sheets */
+.a4-sheet {
+  width: 100%;
+  max-width: 210mm;
+  min-height: 297mm;
+  margin-left: auto;
+  margin-right: auto;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.05);
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.a4-sheet.a4-compact {
+  min-height: auto;
+}
+
+.writing-lines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 23px,
+    #cbd5e1 23px,
+    #cbd5e1 24px
+  );
+}
+
+/* Batch print container is hidden on screen and shown exclusively during batch PDF export */
+.batch-print-only {
+  display: none;
+}
+
+/* Screen preview styling for A5 Landscape Master Card (210mm x 148mm) */
+.a5-master-card {
+  width: 100%;
+  max-width: 210mm;
+  min-height: 148mm;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Precision A4 portrait (worksheets) & A5 landscape (master cards) print rules */
+@page {
+  size: A4 portrait;
+  margin: 12mm;
+}
+
+@page a5-card {
+  size: A5 landscape;
+  margin: 7mm;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .no-print,
+  .print-hidden-page {
+    display: none !important;
+  }
+
+  .batch-print-only {
+    display: block !important;
+  }
+
+  .print-full {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .a4-sheet {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: 271mm !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .a4-sheet.a4-compact {
+    min-height: 271mm !important;
+  }
+
+  .a4-sheet.a4-last-selected {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  .a5-master-card {
+    page: a5-card;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: 132mm !important;
+    height: 132mm !important;
+    margin: 0 !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    break-after: page;
+    page-break-after: always;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .a5-master-card.a4-last-selected {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  .print-avoid-break {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  table,
+  tr,
+  header,
+  footer {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
